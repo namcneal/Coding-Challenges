@@ -1,1 +1,1 @@
-#LeetCode-Fun
+AM & NM = (A & N)M
