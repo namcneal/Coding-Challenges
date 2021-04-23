@@ -1,1 +1,1 @@
-AM & NM = (A & N)M
+Contributors: AM & NM = (A & N)M
