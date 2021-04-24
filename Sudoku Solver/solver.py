@@ -11,7 +11,7 @@ class Board:
 
     def addEntry(entry, row, col):
         """
-        Add entry to the sudoku board
+        Add entry to the Sudoku board
         Entry must be valid integer (1 - 9) and must not result in an invalid board configuration
 
         Parameters
@@ -25,19 +25,50 @@ class Board:
         -------
         bool
             True if entry is valid and results in a valid board 
-            False if entry is invalud or results in an invalid board configuration
+            False if entry is invalid or results in an invalid board configuration
         """
+        # check if number is invalid
         if entry < 1 or entry > 9:
             return False
 
-        # FIXME: add functionality below
         # check if number already in column
+        if entry in self.board[col]:
+            return False 
 
         # check if number already in row
+        if entry in self.board[row]:
+            return False
 
         # check if number already in 3 x 3 square
+        if entry in getSubsquare(row, col):
+            return False
 
+        # proposed entry is valid
         return True
+    
+    def getSubsquare(row, col):
+        """
+        Return the 3 x 3 sub-square in which the entry specified by row and column lives
+
+        Parameters
+        ----------
+        row, col: integer
+            row = row in board
+            col = col in board
+
+        Returns
+        -------
+        subsquare : 3 x 3 numpy array (integers)
+            numpy array containing the entries in the sub-square
+        """
+
+        # split board into nine sub-squares, labeled left-right, top-bottom (squares 1, 2, and 3 on top row, squares 4, 5, and 6 on middle row, etc.)
+        # FIXME: need to come up with a nice way to do this
+        # this function is under construction
+
+        return 0
+
+
 
     def readBoard(filename):
         # FIXME: add functionality to read board from text file
