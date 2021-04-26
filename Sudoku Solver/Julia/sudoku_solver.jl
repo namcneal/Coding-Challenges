@@ -1,4 +1,6 @@
 """
+	gen_testboard
+	-------------
 	Enumerate and label the entries going left to right, top to bottom:
 	    1 2 3 4 5 6 7 8 9
 	    10     ...     18
@@ -12,7 +14,6 @@
 	----------
 	None
 
-	
 	Returns
 	-------
 	The particular, non-valid, board described above.
@@ -31,15 +32,15 @@ end
 
 
 """
+	get_subsquare
+	-------------
 	Extract one of the 9 subsquares that make up the Sudoku board
-	
+
 	Parameters
 	----------
 	board              = The Sudoku board under consideration
 	subsquare_position = Coordinates of the desired subsquare.
 				         Each entry must be between 1-3.
-
-
 
 	Returns
 	-------
@@ -58,6 +59,8 @@ end
 
 
 """
+	contains_duplicates
+	-------------------
 	Determines whether a given container of unsigned, 8-bit integers
 	contains a duplicate entry
 	
@@ -90,6 +93,8 @@ end
 
 
 """
+	isboard_valid
+	-------------
 	Determines whether a given board configuration follows the rules of Sudoku.
 	
 	Parameters
@@ -131,6 +136,8 @@ end
 
 
 """
+	isboard_solved
+	--------------
 	Determines whether a given board configuration is a valid Sudoku solution
 	
 	Parameters
@@ -154,6 +161,8 @@ end
 
 
 """
+	addentry
+	--------
 	Add entry to the Sudoku board
 	Entry must be valid integer (1 - 9) and must not result in an invalid board configuration
 
