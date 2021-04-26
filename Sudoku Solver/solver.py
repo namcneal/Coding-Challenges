@@ -107,7 +107,7 @@ class Board:
 
         for i in range(9):
             for j in range(9):
-                test_board.board[i,j] = count
+                self.board[i,j] = count
                 count += 1
 
 # class Solution:
