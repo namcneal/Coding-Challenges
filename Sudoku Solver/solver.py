@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 class Board:
     def __init__(self):
@@ -32,7 +33,7 @@ class Board:
             return False
 
         # check if number already in column
-        if entry in self.board[col]:
+        if entry in self.board[:, col]:
             return False 
 
         # check if number already in row
@@ -45,7 +46,7 @@ class Board:
 
         # proposed entry is valid
         return True
-    
+
     def getSubsquare(self, row, col):
         """
         Return the 3 x 3 sub-square in which the entry specified by row and column lives
@@ -70,12 +71,43 @@ class Board:
 
         # Return the correct slicing in terms of the 9 x 9 rows 
         return self.board[3*subsquare_row:3*(subsquare_row + 1),
-                          3*subsquare_col:3*(subsquare_col + 1)]
+                3*subsquare_col:3*(subsquare_col + 1)]
 
 
     def readBoard(self, filename):
-        # FIXME: add functionality to read board from text file
-        return True
+        """
+        Read board from file
+
+        Parameters
+        ----------
+        filename: string
+            The name of the file with a .txt extension
+            Must be in working directory
+
+        Modifies
+        --------
+        self.board : clears all previous entries and overwrites them with the contents of the file
+
+        Returns
+        -------
+        None
+        """
+        try: 
+            f = open(filename, "r")
+        except OSError:
+            print("File {} could not be opened!".format(filename))
+            sys.exit()
+        with f:           
+            # clear contents of current board
+            self.board = np.zeros((9, 9), dtype=np.int64)
+            
+            # read in the board row-by-row
+            for row in range(9):
+                row_entries = f.readline()
+                for col in range(9):
+                    self.board[row, col] = row_entries[col]
+            f.close()
+        return 
 
     def __str__(self):
         return self.board.__str__()
