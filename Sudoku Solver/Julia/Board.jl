@@ -1,5 +1,5 @@
 """
-	gen_testboard
+	gen_enumerated
 	-------------
 	Enumerate and label the entries going left to right, top to bottom:
 	    1 2 3 4 5 6 7 8 9
@@ -18,7 +18,7 @@
 	-------
 	The particular, non-valid, board described above.
 """
-function gen_testboard()
+function gen_enumerated()
 	board = zeros(UInt8, (9,9))
 
 	count = 1
@@ -74,7 +74,7 @@ end
 
 
 """
-	get_subsquare
+	getsubsquare
 	-------------
 	Extract one of the 9 subsquares that make up the Sudoku board
 
@@ -89,7 +89,7 @@ end
 	True if any of the entries occur more than once. 
 	False if all are unique.  
 """
-function get_subsquare(board::Array{UInt8, 2}, subsquare_coordinate::Tuple{Int64, Int64})
+function getsubsquare(board::Array{UInt8, 2}, subsquare_coordinate::Tuple{Int64, Int64})
 	subsquare_row = subsquare_coordinate[1]
 	subsquare_col = subsquare_coordinate[2]
 	board_rows    = 1 + 3*(subsquare_row-1) : 3 + 3*(subsquare_row-1)
@@ -99,10 +99,34 @@ function get_subsquare(board::Array{UInt8, 2}, subsquare_coordinate::Tuple{Int64
 	return board[board_rows, board_cols]
 end
 
-function get_entry(board::Array{UInt8, 2}, entry_label::Int64)
-	return board[entry_label2coord(entry_label)]
+function getsubsquare(board::Array{UInt8, 2}, subsquare_label::Int64)
+	return getsubsquare(board, square_label2coord(subsquare_label))
 end
 
+function getentry(board::Array{UInt8, 2}, entry_coordinate::Tuple{Int64, Int64})
+	entry_row = entry_coordinate[1]
+	entry_col = entry_coordinate[2]
+
+	return board[entry_row, entry_col]
+end
+
+function getentry(board::Array{UInt8, 2}, entry_label::Int64)
+	return getentry(board, entry_label2coord(entry_label))
+end
+
+function enum_filled_entries(board::Array{UInt8, 2})
+	filled_entry_labels = gen_enumerated()[board .> 0]
+	filled_entry_labels = convert.(Int, filled_entry_labels)
+
+	return  (sort ∘ vec ∘ permutedims)(filled_entry_labels)
+end
+
+function enum_empty_entries(board::Array{UInt8, 2})
+	empty_entry_labels = gen_enumerated()[board .< 1]
+	empty_entry_labels = convert.(Int, empty_entry_labels)
+
+	return  (sort ∘ vec ∘ permutedims)(empty_entry_labels)
+end
 
 """
 	contains_duplicates
@@ -154,7 +178,7 @@ end
 function isboard_valid(board::Array{UInt8, 2})::Bool
 	# Make sure all the entries are in the correct range
 	if !isempty(filter(x-> (x > 9), board))
-		# return false
+		return false
 	end
 
 	# Loop over each row and each column and check for duplicates
@@ -164,13 +188,16 @@ function isboard_valid(board::Array{UInt8, 2})::Bool
 			return false
 		end
 
-		row_entries = filter(x->x>0, board[:, i])
+		row_entries = filter(x->x>0, board[i, :])
 		if contains_duplicates(row_entries)
 			return false
 		end
 
-		square_coords = square_label2coord(i)
-		if (contains_duplicates∘get_subsquare)(board, square_coords)
+		subsquare_coords  = square_label2coord(i)
+		subsquare         = getsubsquare(board, subsquare_coords)
+		subsquare_entries = filter(x->x>0, vec(subsquare))
+
+		if contains_duplicates(subsquare_entries)
 			return false
 		end
 	end
@@ -248,8 +275,26 @@ function setentry(board::Array{UInt8, 2}, entry_label::Int64, entry::Int64)::Arr
 	return setentry(board, entry_label2coord(entry_label), entry)
 end
 
+function readboard(filename::String)
+	board = zeros(UInt8, (9,9))
 
-test = gen_testboard()
-setentry(test, (1,1), 0)
-print(contains_duplicates(test))
-print(isboard_valid(test))
+	row = 1
+	for line in readlines(filename)
+
+		col = 1
+		for char in line
+			board[row, col] = convert(UInt8, char) - 48
+			col += 1
+		end
+
+		row += 1
+	end
+
+	return board
+end
+
+# test = gen_testboard()
+# print(vec(test'))
+# setentry(test, (1,1), 0)
+# print(contains_duplicates(test))
+# print(isboard_valid(test))
