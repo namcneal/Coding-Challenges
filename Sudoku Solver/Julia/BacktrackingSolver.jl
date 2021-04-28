@@ -28,6 +28,9 @@ function backtrack(board::Array{UInt8, 2}, head::Int64, unfixed_entries::Vector{
 
 	# 1) If the entry's current value was a 9, then the we can't increment it anymore
 	#    so set it equal to zero and try again on the previous entry
+
+	# TODO: Somehow if you call this before testing the new board, then you get an error.
+	#       I have no idea how. So I need to find out.
 	if current_value == 9
 		zero_current = setentry(board, current_label, zero())
 		backtrack(zero_current, head-1, unfixed_entries)
