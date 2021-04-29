@@ -41,6 +41,32 @@ function backtrack(board::Array{UInt8, 2}, head::Int64, unfixed_entries::Vector{
 	backtrack(new_board, head, unfixed_entries)
 end
 
+# function to print board
+function printboard(board::Array{UInt8, 2})
+	# top of board
+	println("+-------+-------+-------+")
+	for row in 1:9
+		print("| ")
+		
+		for col in 1:9
+			print(board[row, col])
+			if col % 3 == 0
+				print(" | ")
+			else 
+				print(" ")
+			end
+		end
+		
+		println()
+	
+		if row % 3 == 0
+			println("+-------+-------+-------+")
+		end
+
+	end
+
+
+end
 
 # Load the test board and its solution
 test_board        = readboard("test_board.txt")
@@ -54,4 +80,6 @@ unfixed_entries = enum_empty_entries(test_board)
 
 if solution == verified_solution
 	print("\nCongratulations, you've solved it.\n")
+	print("\nYour solution looks like this:\n")
+	printboard(solution)
 end
