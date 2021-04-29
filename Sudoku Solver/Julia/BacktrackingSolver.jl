@@ -69,7 +69,8 @@ function printboard(board::Array{UInt8, 2})
 end
 
 # Load the test board and its solution
-test_board        = readboard("test_board.txt")
+# test_board        = readboard("test_board.txt")
+test_board = readboard("test_expert.txt")
 verified_solution = readboard("test_correct_output.txt")
 
 # Determine which entries are available to change
@@ -77,6 +78,9 @@ unfixed_entries = enum_empty_entries(test_board)
 
 # Try and find a solution
 @time solution = backtrack(test_board, 1, unfixed_entries)
+
+print("\nYour solution looks like this:\n")
+printboard(solution)
 
 if solution == verified_solution
 	print("\nCongratulations, you've solved it.\n")
